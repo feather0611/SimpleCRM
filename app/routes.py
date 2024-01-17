@@ -17,14 +17,17 @@ class GetMembers(Resource):
     )
     def get(self):
         members = (
-            Member.query.outerjoin(BorrowFee, Member.pk == BorrowFee.member_fk)
+            Member.query.outerjoin(
+                BorrowFee,
+                (Member.pk == BorrowFee.member_fk) &
+                (BorrowFee.create_time >= dt.now() - timedelta(days=365)),
+            )
             .add_columns(
                 Member.pk,
                 Member.username,
                 func.sum(BorrowFee.borrow_fee),
                 Member.create_time,
             )
-            .filter(BorrowFee.create_time >= dt.now() - timedelta(days=365))
             .group_by(Member.pk)
         )
         print(members[0])
@@ -32,7 +35,7 @@ class GetMembers(Resource):
             {
                 "pk": member.pk,
                 "username": member.username,
-                "totalBorrowFeeLastYear": member[3],
+                "totalBorrowFeeLastYear": member[3] if member[3] is not None else 0,
                 "create_time": str(member.create_time),
             }
             for member in members
@@ -148,9 +151,17 @@ class getMemberPeriodBorrowTotal(Resource):
         summary="Get Borrow History of a member",
     )
     def post(self):
-        member_fk_criteria = BorrowFee.member_fk == self.req_parser.parse_args()["member_fk"]
-        period_criteria = and_(BorrowFee.create_time >= self.req_parser.parse_args()["start_time"], BorrowFee.create_time <= self.req_parser.parse_args()["end_time"])
+        member_fk_criteria = (
+            BorrowFee.member_fk == self.req_parser.parse_args()["member_fk"]
+        )
+        period_criteria = and_(
+            BorrowFee.create_time >= self.req_parser.parse_args()["start_time"],
+            BorrowFee.create_time <= self.req_parser.parse_args()["end_time"],
+        )
         criteria = and_(member_fk_criteria, period_criteria)
         borrow_fees = BorrowFee.query.filter(criteria).all()
-        
-        return {"member_fk": self.req_parser.parse_args()["member_fk"], "borrow_fees": [borrow_fee.serialize() for borrow_fee in borrow_fees]}, 200
+
+        return {
+            "member_fk": self.req_parser.parse_args()["member_fk"],
+            "borrow_fees": [borrow_fee.serialize() for borrow_fee in borrow_fees],
+        }, 200
