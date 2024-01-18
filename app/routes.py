@@ -143,7 +143,7 @@ class getMemberPeriodBorrowTotal(Resource):
         help="%Y-%m-%d %H:%M:%S",
     )
 
-    @swagger.tags(["Get"])
+    @swagger.tags(["Post"])
     @swagger.reqparser(name="getMemberLastYearBorrowHistory", parser=req_parser)
     @swagger.reorder_with(
         BorrowFeeResponseModel,
@@ -152,7 +152,7 @@ class getMemberPeriodBorrowTotal(Resource):
     )
     def post(self):
         member_fk_criteria = (
-            BorrowFee.member_fk == self.req_parser.parse_args()["member_fk"]
+            BorrowFee.member_fk == int(self.req_parser.parse_args()["member_fk"])
         )
         period_criteria = and_(
             BorrowFee.create_time >= self.req_parser.parse_args()["start_time"],
