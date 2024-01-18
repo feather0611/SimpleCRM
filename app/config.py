@@ -1,4 +1,4 @@
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://YOURACCOUNT:YOURPASSWORD@YOUR_URI:3306/YOUR_DB'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://test:1234qwer.@localhost:3306/titanDevOps'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
