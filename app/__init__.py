@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful_swagger_3 import Api, get_swagger_blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import app.config as config
+import config as config
 
 app = Flask(__name__)
 CORS(app)

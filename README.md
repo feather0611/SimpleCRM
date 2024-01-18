@@ -2,13 +2,22 @@
 
 使用Python 3.10.6 + flask
 
+### ENVs for Docker
+```
+ENV DB_USERNAME = test
+ENV DB_PASSWORD = 12345678
+ENV DB_URL = localhost
+ENV DB_PORT = 3306
+ENV DB_NAME = database
+ENV APP_HOST=127.0.0.1
+ENV APP_PORT=5000
+```
+
 ### Database
 
 使用MySQL，DB內容在 `db_content`
 
 ### local運行方式
-
-請將 `app/config.py`的DB連線資訊更改成local DB連線資訊
 
 Windows進到專案資料夾中
 ```

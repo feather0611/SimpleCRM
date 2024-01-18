@@ -4,10 +4,10 @@ from flask_restful_swagger_3 import swagger, Resource
 from sqlalchemy import and_, func
 
 from app import db
-from app.models.BorrowFeeModel import BorrowFee
-from app.models.BorrowFeeResponseModel import BorrowFeeResponseModel
-from app.models.MemberModel import *
-from app.models.MemberResponseModel import MemberResponseModel
+from models.BorrowFeeModel import BorrowFee
+from models.BorrowFeeResponseModel import BorrowFeeResponseModel
+from models.MemberModel import *
+from models.MemberResponseModel import MemberResponseModel
 
 
 class GetMembers(Resource):
